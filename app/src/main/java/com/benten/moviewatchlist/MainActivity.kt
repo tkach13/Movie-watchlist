@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.benten.moviewatchlist.databinding.ActivityMainBinding
 import com.benten.moviewatchlist.detailsScreen.MovieDetailsFragment
 import com.benten.moviewatchlist.listScreen.MovieListFragment
+import com.benten.moviewatchlist.models.MovieItem
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -23,7 +25,6 @@ class MainActivity : AppCompatActivity() {
             addToBackStack(MovieListFragment::javaClass.name)
             commit()
         }
-
     }
 }
 

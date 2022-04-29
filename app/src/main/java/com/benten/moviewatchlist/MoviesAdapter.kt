@@ -4,25 +4,33 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.benten.moviewatchlist.databinding.LayoutMovieItemBinding
+import com.benten.moviewatchlist.models.MovieItem
 import com.bumptech.glide.Glide
 
-class MoviesAdapter(val movieList: MutableList<Movie>) : RecyclerView.Adapter<MoviesViewHolder>() {
-    private lateinit var itemClickListener: (Movie,Int) -> Unit
+class MoviesAdapter(val movieList: MutableList<MovieItem>) : RecyclerView.Adapter<MoviesViewHolder>() {
+    private lateinit var itemClickListener: (MovieItem,Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         val binding =
             LayoutMovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MoviesViewHolder(binding)
     }
+    fun updateList(movies:List<MovieItem>){
+        movieList.clear()
+        movieList.addAll(movies)
+        notifyDataSetChanged()
+    }
 
-    fun setOnItemCLickListener(clickListener: (Movie, Int) -> Unit) {
+    fun setOnItemCLickListener(clickListener: (MovieItem, Int) -> Unit) {
         itemClickListener = clickListener
     }
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         val movie = movieList[position]
-        Glide.with(holder.itemView.context).load(movie.picture).into(holder.binding.ivImagePoster)
-        holder.binding.tvMovieName.text = movie.movieName
+        holder.binding.tvMovieName.text = movie.originalTitle
+        holder.binding.ivImagePoster.setImageURI("https://image.tmdb.org/t/p/w500${movie.posterPath}")
+        holder.binding.tvRating.text = movie.voteAverage.toString()
+        holder.binding.tvReleaseDate.text = movie.releaseDate
         holder.binding.tvMovieName.setOnClickListener {
             itemClickListener.invoke(movie,position)
         }
@@ -33,11 +41,7 @@ class MoviesAdapter(val movieList: MutableList<Movie>) : RecyclerView.Adapter<Mo
     }
 }
 
-data class Movie(
-    var movieName: String,
-    val picture: String,
-    val isChecked: Boolean = false
-)
+
 
 class MoviesViewHolder(val binding: LayoutMovieItemBinding) :
     RecyclerView.ViewHolder(binding.root) {

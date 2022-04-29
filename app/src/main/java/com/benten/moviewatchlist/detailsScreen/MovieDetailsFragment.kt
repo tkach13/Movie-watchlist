@@ -4,10 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.benten.moviewatchlist.databinding.FragmentMovieDetailsBinding
+import com.benten.moviewatchlist.helpers.RetrofitHelper
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.lang.Exception
 
 class MovieDetailsFragment() : Fragment() {
     private var _binding: FragmentMovieDetailsBinding? = null
@@ -24,10 +33,24 @@ class MovieDetailsFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val movieName = requireArguments().getString(KEY_MOVIE_NAME)
-        binding.tvMovieName.text = movieName
-        val movieUrl = requireArguments().getString(KEY_MOVIE_URL)
-        Glide.with(requireContext()).load(movieUrl).into(binding.ivLargePoster )
+        val movieId = requireArguments().getInt(KEY_MOVIE_NAME)
+
+        CoroutineScope(IO).launch {
+            try {
+                val response = RetrofitHelper.popularsApi.getMovieDetails(
+                    movieId = movieId,
+                    "843c612d1207fdec63f0e6a5fd426d68"
+                )
+                withContext(Main) {
+                    binding.tvMovieName.text = response.originalTitle
+                    binding.tvMovieDescription.text = response.overview
+                }
+            } catch (e:Exception){
+
+            }
+
+
+        }
     }
 
     override fun onDestroyView() {
@@ -37,10 +60,9 @@ class MovieDetailsFragment() : Fragment() {
 
     companion object {
         const val KEY_MOVIE_NAME = "KEY_MOVIE_NAME"
-        const val KEY_MOVIE_URL = "KEY_MOVIE_URL"
-        fun newInstance(movieName: String, movieUrl: String): MovieDetailsFragment {
+        fun newInstance(movieId: Int): MovieDetailsFragment {
             return MovieDetailsFragment().apply {
-                arguments = bundleOf(KEY_MOVIE_NAME to movieName, KEY_MOVIE_URL to movieUrl)
+                arguments = bundleOf(KEY_MOVIE_NAME to movieId)
             }
         }
     }
