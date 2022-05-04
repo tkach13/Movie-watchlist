@@ -31,7 +31,7 @@ class MoviesAdapter(val movieList: MutableList<MovieItem>) : RecyclerView.Adapte
         holder.binding.ivImagePoster.setImageURI("https://image.tmdb.org/t/p/w500${movie.posterPath}")
         holder.binding.tvRating.text = movie.voteAverage.toString()
         holder.binding.tvReleaseDate.text = movie.releaseDate
-        holder.binding.tvMovieName.setOnClickListener {
+        holder.binding.root.setOnClickListener {
             itemClickListener.invoke(movie,position)
         }
     }

@@ -20,11 +20,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Fresco.initialize(this)
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.flContent, MovieListFragment())
-            addToBackStack(MovieListFragment::javaClass.name)
-            commit()
+        if (supportFragmentManager.findFragmentById(R.id.flContent) == null){
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.flContent, MovieListFragment())
+                addToBackStack(MovieListFragment::javaClass.name)
+                commit()
+            }
         }
+
     }
 }
 
