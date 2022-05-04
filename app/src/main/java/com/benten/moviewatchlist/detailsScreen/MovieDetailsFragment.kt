@@ -43,6 +43,7 @@ class MovieDetailsFragment() : Fragment() {
                 )
                 withContext(Main) {
                     binding.tvMovieName.text = response.originalTitle
+                    binding.ivLargePoster.setImageURI("https://image.tmdb.org/t/p/w500${response.backdropPath}")
                     binding.tvMovieDescription.text = response.overview
                 }
             } catch (e:Exception){
