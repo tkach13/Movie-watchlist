@@ -1,21 +1,18 @@
-package com.benten.moviewatchlist.detailsScreen
+package com.benten.moviewatchlist.presentation.detailsScreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.benten.moviewatchlist.databinding.FragmentMovieDetailsBinding
 import com.benten.moviewatchlist.helpers.RetrofitHelper
-import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 import java.lang.Exception
 
 class MovieDetailsFragment() : Fragment() {

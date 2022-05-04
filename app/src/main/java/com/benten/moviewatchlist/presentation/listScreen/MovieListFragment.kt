@@ -1,4 +1,4 @@
-package com.benten.moviewatchlist.listScreen
+package com.benten.moviewatchlist.presentation.listScreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.benten.moviewatchlist.MoviesAdapter
 import com.benten.moviewatchlist.R
 import com.benten.moviewatchlist.databinding.FragmentMovieListBinding
-import com.benten.moviewatchlist.detailsScreen.MovieDetailsFragment
+import com.benten.moviewatchlist.presentation.detailsScreen.MovieDetailsFragment
 import com.benten.moviewatchlist.helpers.RetrofitHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -23,6 +24,8 @@ import retrofit2.HttpException
 class MovieListFragment : Fragment() {
     private var _binding: FragmentMovieListBinding? = null
     private lateinit var moviesAdapter: MoviesAdapter
+
+    private val viewModel by viewModels<ListScreenViewModel>()
 
     private val binding get() = _binding!!
 
@@ -38,23 +41,8 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
-
-
-
-        CoroutineScope(IO).launch {
-            try {
-                val response =
-                    RetrofitHelper.popularsApi.getPopularMovies("843c612ddsadsadasdadads1207fdec63f0e6a5fd426d68")
-                withContext(Main) {
-                    moviesAdapter.updateList(response.results)
-                }
-            } catch (e:HttpException){
-                withContext(Main) {
-                    Toast.makeText(requireContext(),"error haa been occured, ${e.code()}", Toast.LENGTH_LONG).show()
-                }
-            }
-
-
+        viewModel.getMoviesLiveData().observe(viewLifecycleOwner) {
+            moviesAdapter.updateList(it)
         }
 
     }

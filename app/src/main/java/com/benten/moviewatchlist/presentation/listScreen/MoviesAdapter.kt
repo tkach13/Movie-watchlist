@@ -1,11 +1,10 @@
-package com.benten.moviewatchlist
+package com.benten.moviewatchlist.presentation.listScreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.benten.moviewatchlist.databinding.LayoutMovieItemBinding
 import com.benten.moviewatchlist.models.MovieItem
-import com.bumptech.glide.Glide
 
 class MoviesAdapter(val movieList: MutableList<MovieItem>) : RecyclerView.Adapter<MoviesViewHolder>() {
     private lateinit var itemClickListener: (MovieItem,Int) -> Unit
