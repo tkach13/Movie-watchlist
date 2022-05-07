@@ -1,5 +1,6 @@
 package com.benten.moviewatchlist.presentation.detailsScreen
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,11 +44,19 @@ class MovieDetailsFragment() : Fragment() {
                     binding.ivLargePoster.setImageURI("https://image.tmdb.org/t/p/w500${response.backdropPath}")
                     binding.tvMovieDescription.text = response.overview
                 }
-            } catch (e:Exception){
+            } catch (e: Exception) {
 
             }
+        }
 
-
+        binding.btnShare.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, binding.tvMovieName.text)
+            }
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            }
         }
     }
 
